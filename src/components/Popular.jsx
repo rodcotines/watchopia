@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { getTrending } from "@/service";
+import { getPopular } from "@/service";
 import { getGenreNames } from "@/utils";
 import { Star } from "lucide-react";
 import {
@@ -19,9 +19,9 @@ function Popular() {
   const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
-    const fetchTrendingMovies = async () => {
+    const fetchPopularMovies = async () => {
       try {
-        const trendingMovies = await getTrending();
+        const trendingMovies = await getPopular();
         setMovieList(trendingMovies);
         setLoading(false);
       } catch (error) {
@@ -31,7 +31,7 @@ function Popular() {
       }
     };
 
-    fetchTrendingMovies();
+    fetchPopularMovies();
   }, []);
 
   if (loading) {
@@ -45,7 +45,7 @@ function Popular() {
   return (
     <div className="p-4 bg-gray-950 text-white">
       <div className="flex w-full px-4 py-2 text-2xl font-primary">
-        <h1>What's Popular?</h1>
+        <h1>What`&apos`s Popular?</h1>
       </div>
       <div className="flex overflow-x-auto space-x-4 px-4 py-2">
         {movieList.map((movie, i) => (
@@ -53,7 +53,7 @@ function Popular() {
             <Dialog>
               <DialogTrigger asChild>
                 <div
-                  className="h-3/4 w-48 cursor-pointer transition-all hover:rotate-3 hover:scale-105 relative"
+                  className="h-3/4 w-48 cursor-pointer transition-all  hover:scale-105 relative"
                   onClick={() => setSelectedMovie(movie)}
                 >
                   <div

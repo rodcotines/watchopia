@@ -69,7 +69,7 @@ function Slider() {
           ))}
         </CarouselContent>
       </Carousel>
-      <div className="absolute inset-0 bg-black bg-opacity-80 bg-gradient-to-r from-gradient flex items-center justify-center">
+      <div className="absolute inset-0 bg-black bg-opacity-20 bg-gradient-to-b from-transparent to-black flex items-center justify-center">
         <div className="text-white text-center p-5 z-10 max-w-[1240px]">
           <h1 className="font-primary text-4xl md:text-5xl lg:text-6xl font-semibold mb-6">
             Discover a premier alternative to{" "}
