@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import { getRated } from "@/service";
 import { getGenreNames } from "@/utils";
@@ -11,12 +12,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useRouter } from "next/navigation"; // Import the router
+import { Button } from "./ui/button";
 
 function TopRated() {
   const [movieList, setMovieList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const router = useRouter(); // Initialize the router
 
   useEffect(() => {
     const fetchTopRatedMovies = async () => {
@@ -42,8 +46,12 @@ function TopRated() {
     return <p>{error}</p>; // Placeholder for error state
   }
 
+  const handleViewMore = (movieId) => {
+    router.push(`/movie/${movieId}`); // Navigate to the movie detail page
+  };
+
   return (
-    <div className="p-4 bg-gray-950 text-white">
+    <div className="p-4 bg-black text-white">
       <div className="flex w-full px-4 py-2 text-2xl font-primary">
         <h1>Top Rated</h1>
       </div>
@@ -65,14 +73,14 @@ function TopRated() {
                 </div>
               </DialogTrigger>
               <DialogContent className="bg-transparent p-0 max-w-screen-md">
-                <div className="relative  h-96">
+                <div className="relative h-96">
                   <div
                     className="absolute inset-0 bg-cover bg-center rounded-md"
                     style={{
                       backgroundImage: `url('https://image.tmdb.org/t/p/original${selectedMovie?.backdrop_path}')`,
                     }}
                   ></div>
-                  <div className="relative z-10 p-4 bg-black bg-opacity-70 rounded-md text-white h-96">
+                  <div className="relative p-4 bg-black bg-opacity-70 rounded-md text-white h-96">
                     <div className="flex flex-col items-start justify-start max-w-xl">
                       <DialogHeader>
                         <DialogTitle className="py-6 text-3xl font-primary text-left">
@@ -83,13 +91,21 @@ function TopRated() {
                         </DialogTitle>
                       </DialogHeader>
                       <DialogDescription className="text-justify">
-                        <p className=" font-secondary text-[#FFD700]">
+                        <p className="font-secondary text-[#FFD700] mb-2 text-xl font-medium">
                           {selectedMovie &&
                             getGenreNames(selectedMovie.genre_ids)}
                         </p>
                         <p className="text-white font-secondary">
                           {selectedMovie?.overview}
                         </p>
+                        <Button
+                          variant="outline"
+                          onClick={() => handleViewMore(selectedMovie.id)}
+                          className="mt-4"
+                        >
+                          {" "}
+                          View More
+                        </Button>
                       </DialogDescription>
                     </div>
                   </div>

@@ -1,7 +1,6 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
-import { getPopular } from "@/service";
+import { getUpcoming } from "@/service";
 import { getGenreNames } from "@/utils";
 import { Star } from "lucide-react";
 import {
@@ -15,7 +14,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
-function Popular() {
+function Upcoming() {
   const [movieList, setMovieList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,9 +22,9 @@ function Popular() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchPopularMovies = async () => {
+    const fetchUpcomingMovie = async () => {
       try {
-        const trendingMovies = await getPopular();
+        const trendingMovies = await getUpcoming();
         setMovieList(trendingMovies);
         setLoading(false);
       } catch (error) {
@@ -35,7 +34,7 @@ function Popular() {
       }
     };
 
-    fetchPopularMovies();
+    fetchUpcomingMovie();
   }, []);
 
   if (loading) {
@@ -45,15 +44,13 @@ function Popular() {
   if (error) {
     return <p>{error}</p>; // Placeholder for error state
   }
-
   const handleViewMore = (movieId) => {
-    router.push(`/movie/${movieId}`);
+    router.push(`/movie/${movieId}`); // Navigate to the movie detail page
   };
-
   return (
     <div className="p-4 bg-black text-white">
-      <div className="flex w-full px-4 py-2 text-2xl font-primary ">
-        <h1>What&apos;s Popular?</h1>
+      <div className="flex w-full px-4 py-2 text-2xl font-primary">
+        <h1>Upcoming Movies</h1>
       </div>
       <div className="flex overflow-x-auto space-x-4 px-4 py-2">
         {movieList.map((movie, i) => (
@@ -61,7 +58,7 @@ function Popular() {
             <Dialog>
               <DialogTrigger asChild>
                 <div
-                  className="h-3/4 w-48 cursor-pointer transition-all hover:scale-105 relative"
+                  className="h-3/4 w-48 cursor-pointer transition-all  hover:scale-105 relative"
                   onClick={() => setSelectedMovie(movie)}
                 >
                   <div
@@ -73,14 +70,14 @@ function Popular() {
                 </div>
               </DialogTrigger>
               <DialogContent className="bg-transparent p-0 max-w-screen-md">
-                <div className="relative h-96">
+                <div className="relative  h-96">
                   <div
                     className="absolute inset-0 bg-cover bg-center rounded-md"
                     style={{
                       backgroundImage: `url('https://image.tmdb.org/t/p/original${selectedMovie?.backdrop_path}')`,
                     }}
                   ></div>
-                  <div className="relative p-4 bg-black bg-opacity-20 bg-gradient-to-b from-transparent to-black rounded-md text-white h-96">
+                  <div className="relative  p-4 bg-black bg-opacity-20 bg-gradient-to-b from-transparent to-black rounded-md text-white h-96">
                     <div className="flex flex-col items-start justify-start max-w-xl">
                       <DialogHeader>
                         <DialogTitle className="py-6 text-3xl font-primary text-left">
@@ -137,4 +134,4 @@ function Popular() {
   );
 }
 
-export default Popular;
+export default Upcoming;
