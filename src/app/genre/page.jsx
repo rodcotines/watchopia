@@ -8,7 +8,7 @@ function page() {
           Working on it
         </h1>
         <p className="text-xl text-gray-400">
-          This page is not available for now, coming soon.
+          This page is not available for now.
         </p>
       </div>
     </div>
