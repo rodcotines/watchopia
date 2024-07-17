@@ -80,3 +80,15 @@ export const getMoviePopularDetails = async (movieId) => {
     cast: movieCastResponse.data.cast,
   };
 };
+
+export const handleSearch = async (query) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/search/movie?api_key=${apiKey}&query=${query}`
+    );
+    return response.data.results;
+  } catch (error) {
+    console.error("API Error: ", error);
+    throw new Error("Failed to fetch data");
+  }
+};
