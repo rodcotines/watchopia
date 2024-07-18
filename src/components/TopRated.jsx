@@ -38,14 +38,6 @@ function TopRated() {
     fetchTopRatedMovies();
   }, []);
 
-  if (loading) {
-    return <p>Loading...</p>; // Placeholder for loading state
-  }
-
-  if (error) {
-    return <p>{error}</p>; // Placeholder for error state
-  }
-
   const handleViewMore = (movieId) => {
     router.push(`/movie/${movieId}`); // Navigate to the movie detail page
   };

@@ -38,14 +38,6 @@ function Slider() {
     fetchTrendingMovies();
   }, []); // Empty dependency array ensures useEffect runs only once on component mount
 
-  if (loading) {
-    return <p>Loading...</p>; // Placeholder for loading state
-  }
-
-  if (error) {
-    return <p>{error}</p>; // Placeholder for error state
-  }
-
   return (
     <div className="relative">
       <Carousel

@@ -24,14 +24,6 @@ function People() {
     fetchPeople();
   }, []);
 
-  if (loading) {
-    return <p>Loading...</p>; // Placeholder for loading state
-  }
-
-  if (error) {
-    return <p>{error}</p>; // Placeholder for error state
-  }
-
   return (
     <div className="p-4 bg-black text-white">
       <div className="flex w-full px-4 py-2 text-2xl font-primary">
