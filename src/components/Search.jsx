@@ -155,7 +155,6 @@ const Search = () => {
                           onClick={() => handleViewMore(selectedMovie.id)}
                           className="mt-4"
                         >
-                          {" "}
                           View More
                         </Button>
                       </DialogDescription>

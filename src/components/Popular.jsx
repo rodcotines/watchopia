@@ -14,20 +14,13 @@ import {
 } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
-import { Progress } from "@/components/ui/progress";
 
 function Popular() {
-  const [progress, setProgress] = React.useState(13);
   const [movieList, setMovieList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const router = useRouter();
-
-  React.useEffect(() => {
-    const timer = setTimeout(() => setProgress(66), 500);
-    return () => clearTimeout(timer);
-  }, []);
 
   useEffect(() => {
     const fetchPopularMovies = async () => {
@@ -45,14 +38,6 @@ function Popular() {
     fetchPopularMovies();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="h-screen flex items-center justify-center mx-auto">
-        <Progress value={progress} className="w-[60%] " />;
-      </div>
-    ); // Placeholder for loading state
-  }
-
   if (error) {
     return <p>{error}</p>; // Placeholder for error state
   }
@@ -62,7 +47,7 @@ function Popular() {
   };
 
   return (
-    <div className="p-4 bg-black text-white">
+    <div id="popular" className="p-4 bg-black text-white">
       <div className="flex w-full px-4 py-2 text-2xl font-primary ">
         <h1>What&apos;s Popular?</h1>
       </div>

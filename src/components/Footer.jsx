@@ -9,14 +9,15 @@ function Footer() {
           👋 Welcome to WATCHOPIA
         </h1>
         <p className="font-secondary font-normal text-xs">
-          Created with &#10084; by Rod Cotines
+          Created with<span className="text-[#FFD700]"> &#10084;</span> by Rod
+          Cotines
         </p>
         <p className="font-secondary font-normal text-xs">
-          Copyright © WATCHOPIA 2024
+          Copyright <span className="text-[#FFD700]"> © </span> WATCHOPIA 2024
         </p>
       </div>
       <div>
-        <p>
+        <p className="hover:scale-105 hover:text-[#FFD700] transition ease-in-out duration-300">
           <Link href="https://github.com/rodcotines/watchopia">
             <Github />
           </Link>

@@ -7,20 +7,29 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Autoplay from "embla-carousel-autoplay";
+import { ChevronsDown } from "lucide-react";
 
 import SparklesText from "@/components/magicui/sparkles-text";
+import { Progress } from "@/components/ui/progress";
+import { motion } from "framer-motion";
 
 import { getTrending } from "@/service";
+import Link from "next/link";
 
 function Slider() {
-  const plugin = React.useRef(
-    Autoplay({ delay: 4000, stopOnInteraction: false })
-  );
+  const [progress, setProgress] = useState(33);
+
+  const plugin = useRef(Autoplay({ delay: 4000, stopOnInteraction: false }));
   const [movieList, setMovieList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setProgress(55), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const fetchTrendingMovies = async () => {
@@ -36,7 +45,21 @@ function Slider() {
     };
 
     fetchTrendingMovies();
-  }, []); // Empty dependency array ensures useEffect runs only once on component mount
+  }, []);
+  if (loading) {
+    return (
+      <div className="h-screen flex flex-col items-center justify-center mx-auto space-y-4 bg-pri">
+        <h1 className="font-primary text-5xl font-black text-black">
+          WATCHOPIA
+        </h1>
+        <Progress value={progress} className="w-[30%] " />
+      </div>
+    ); // Placeholder for loading state
+  }
+
+  if (error) {
+    return <p>{error}</p>; // Placeholder for error state
+  }
 
   return (
     <div className="relative">
@@ -77,6 +100,22 @@ function Slider() {
             Explore and discuss your favorite entertainment content like never
             before.
           </p>
+
+          <motion.p
+            animate={{
+              y: [0, 15, 0],
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              repeatType: "loop",
+            }}
+            className="flex items-center justify-center "
+          >
+            <Link href="#popular">
+              <ChevronsDown size={30} className="mt-5" />
+            </Link>
+          </motion.p>
         </div>
       </div>
     </div>

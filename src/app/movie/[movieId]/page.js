@@ -4,12 +4,19 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { getMoviePopularDetails } from "@/service";
 import { Star } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 
 const MovieDetails = ({ params }) => {
+  const [progress, setProgress] = useState(33);
   const { movieId } = params;
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setProgress(55), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -28,7 +35,16 @@ const MovieDetails = ({ params }) => {
     fetchMovieDetails();
   }, [movieId]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) {
+    return (
+      <div className="h-screen flex flex-col items-center justify-center mx-auto space-y-4 bg-primary-foreground">
+        <h1 className="font-primary text-5xl font-black text-[#FFD700]">
+          WATCHOPIA
+        </h1>
+        <Progress value={progress} className="w-[30%] text-[#FFD700]" />
+      </div>
+    ); // Placeholder for loading state
+  }
   if (error) return <p>{error}</p>;
   if (!movie) return null;
 
