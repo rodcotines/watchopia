@@ -88,7 +88,7 @@ const MovieDetails = ({ params }) => {
                         />
                       ) : (
                         <div className="absolute inset-0 h-full w-full object-cover rounded-md bg-gray-800 flex items-center justify-center text-white">
-                          No Image
+                          No Image is seen
                         </div>
                       )}
                     </div>
