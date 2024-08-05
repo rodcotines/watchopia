@@ -11,8 +11,9 @@ export default function Home() {
       <Slider />
 
       <Popular />
-      <TopRated />
       <Upcoming />
+      <TopRated />
+
       <People />
     </div>
   );
