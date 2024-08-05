@@ -1,4 +1,3 @@
-// app/movie/[movieId]/page.js
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
@@ -12,6 +11,7 @@ const MovieDetails = ({ params }) => {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isTrailerOpen, setIsTrailerOpen] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setProgress(55), 1000);
@@ -48,8 +48,12 @@ const MovieDetails = ({ params }) => {
   if (error) return <p>{error}</p>;
   if (!movie) return null;
 
+  const trailer = movie.videos.find(
+    (video) => video.type === "Trailer" && video.site === "YouTube"
+  );
+
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen pb-20">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
@@ -67,9 +71,20 @@ const MovieDetails = ({ params }) => {
               {" ◦ "} {movie.runtime} min {" ◦ "}{" "}
               {movie.genres.map((gen) => gen.name).join(" ◦ ")}
             </p>
+            {trailer && (
+              <div className="mb-6 lg:mb-8">
+                <button
+                  className="px-4 py-2 bg-red-600  text-white rounded-lg"
+                  onClick={() => setIsTrailerOpen(true)}
+                >
+                  Watch Trailer
+                </button>
+              </div>
+            )}
             <p className="max-w-screen-md text-white font-secondary font-medium mb-6 lg:mb-8">
               {movie.overview}
             </p>
+
             <div className="mt-4">
               <h2 className="text-2xl lg:text-3xl font-primary font-semibold mb-4 lg:mb-6">
                 Cast
@@ -116,6 +131,27 @@ const MovieDetails = ({ params }) => {
           </div>
         </div>
       </div>
+      {isTrailerOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
+          <div className="rounded-lg max-w-3xl w-full">
+            <button
+              className="absolute top-4 right-4 text-black text-2xl"
+              onClick={() => setIsTrailerOpen(false)}
+            >
+              &times;
+            </button>
+            <iframe
+              width="100%"
+              height="500"
+              src={`https://www.youtube.com/embed/${trailer.key}`}
+              frameBorder="0"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              title="Movie Trailer"
+            ></iframe>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

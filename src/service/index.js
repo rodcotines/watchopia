@@ -74,10 +74,14 @@ export const getMoviePopularDetails = async (movieId) => {
   const movieCastResponse = await axios.get(
     `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${apiKey}`
   );
+  const movieVideosResponse = await axios.get(
+    `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}`
+  );
 
   return {
     ...movieDetailsResponse.data,
     cast: movieCastResponse.data.cast,
+    videos: movieVideosResponse.data.results,
   };
 };
 
