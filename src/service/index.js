@@ -31,6 +31,17 @@ export const getMoviePopularDetails = async (movieId) => {
   };
 };
 
+export const getMoviesByGenre = async (genreId, page = 1) => {
+  try {
+    const response = await axios.get(
+      `${API_URL}/discover/movie?api_key=${apiKey}&with_genres=${genreId}&sort_by=popularity.desc&page=${page}`
+    );
+    return response.data.results;
+  } catch (error) {
+    throw new Error("Failed to fetch data");
+  }
+};
+
 export const handleSearch = async (query) => {
   try {
     const response = await axios.get(

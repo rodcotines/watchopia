@@ -1,30 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { handleSearch, getTrending } from "@/service";
-import { Input } from "@/components/ui/input";
-import { getGenreNames } from "@/utils";
-import { Star } from "lucide-react";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-
-import { useRouter } from "next/navigation";
-import { Button } from "./ui/button";
+import { Search as SearchIcon } from "lucide-react";
+import { MovieCard } from "./MovieCard";
 
 const Search = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [selectedMovie, setSelectedMovie] = useState(null);
   const [debouncedQuery, setDebouncedQuery] = useState(query);
-  const router = useRouter();
 
   const fetchTrending = async () => {
     setLoading(true);
@@ -47,10 +32,7 @@ const Search = () => {
     const handler = setTimeout(() => {
       setDebouncedQuery(query);
     }, 500);
-
-    return () => {
-      clearTimeout(handler);
-    };
+    return () => clearTimeout(handler);
   }, [query]);
 
   useEffect(() => {
@@ -75,108 +57,44 @@ const Search = () => {
     fetchResults();
   }, [debouncedQuery]);
 
-  const handleViewMore = (movieId) => {
-    router.push(`/movie/${movieId}`);
-  };
-
   return (
-    <div className="bg-black relative min-h-screen pt-28">
-      <form
-        onSubmit={(e) => e.preventDefault()} // Prevent form submission
-        className="flex w-full items-center  justify-center pb-4"
-      >
-        <Input
-          type="text"
-          placeholder="Type here to search..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="p-2 border border-gray-300 rounded mr-2 w-[1120px] font-primary h-11 "
-        />
-      </form>
-      {loading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-      <div className="grid xl:grid-cols-7 lg:grid-cols-5 md:grid-cols-3 gap-4 p-4">
+    <div className="bg-[#141414] relative min-h-screen pt-24 pb-12">
+      {/* Search bar */}
+      <div className="px-8 pb-8">
+        <div className="relative max-w-2xl mx-auto">
+          <SearchIcon
+            size={18}
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none"
+          />
+          <input
+            type="text"
+            placeholder="Search movies..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="w-full bg-white/8 border border-white/10 text-white placeholder-white/30 font-secondary text-sm rounded-xl py-3 pl-11 pr-4 focus:outline-none focus:border-[#FFD700]/50 focus:bg-white/10 transition-all duration-200"
+          />
+        </div>
+      </div>
+
+      {/* Section label */}
+      <div className="flex items-center gap-3 px-8 pb-5">
+        <div className="w-1 h-5 bg-[#FFD700] rounded-full flex-shrink-0" />
+        <h2 className="text-lg font-primary font-semibold text-white tracking-wide">
+          {query ? "Search Results" : "Trending Now"}
+        </h2>
+        {loading && (
+          <span className="text-white/30 text-xs font-secondary ml-1">Loading...</span>
+        )}
+      </div>
+
+      {error && (
+        <p className="px-8 text-red-400 text-sm font-secondary mb-4">{error}</p>
+      )}
+
+      {/* Results grid */}
+      <div className="grid xl:grid-cols-7 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4 px-8">
         {results.map((movie) => (
-          <div key={movie.id} className="rounded-md duration-300 flex flex-col h-96 ">
-            <Dialog>
-              <DialogTrigger asChild>
-                <div
-                  className="h-full w-full cursor-pointer transition-all hover:scale-105 relative"
-                  onClick={() => setSelectedMovie(movie)}
-                >
-                  <div
-                    className="absolute inset-0 bg-cover bg-center rounded-md"
-                    style={{
-                      backgroundImage: `url('https://image.tmdb.org/t/p/w500${movie.poster_path}')`,
-                    }}
-                  ></div>
-                </div>
-              </DialogTrigger>
-              <DialogContent className="bg-transparent p-0 max-w-screen-md">
-                <div className="relative h-96">
-                  <div
-                    className="absolute inset-0 bg-cover bg-center rounded-md"
-                    style={{
-                      backgroundImage: `url('https://image.tmdb.org/t/p/original${selectedMovie?.backdrop_path}')`,
-                    }}
-                  ></div>
-                  <div className="relative p-4 bg-black bg-opacity-20 bg-gradient-to-b from-transparent to-black rounded-md text-white h-96">
-                    <div className="flex flex-col items-start justify-start max-w-xl">
-                      <DialogHeader>
-                        <DialogTitle className="py-6 text-3xl font-primary text-left">
-                          <span>{selectedMovie?.title}</span>
-                          <span className="ml-2 text-xl text-white">
-                            {selectedMovie?.release_date.substring(0, 4)}
-                          </span>
-                        </DialogTitle>
-                      </DialogHeader>
-                      <DialogDescription className="text-justify">
-                        <p className=" font-secondary text-[#FFD700] mb-2 text-xl font-medium ">
-                          {selectedMovie &&
-                            getGenreNames(selectedMovie.genre_ids)}
-                        </p>
-                        <p className="text-white font-secondary ">
-                          {selectedMovie?.overview}
-                        </p>
-                        <Button
-                          variant="outline"
-                          onClick={() => handleViewMore(selectedMovie.id)}
-                          className="mt-4"
-                        >
-                          View More
-                        </Button>
-                      </DialogDescription>
-                    </div>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-            {/* <div className="h-full w-full cursor-pointer transition-all hover:scale-105 relative">
-              <div
-                className="absolute inset-0 bg-cover bg-center rounded-md"
-                style={{
-                  backgroundImage: `url('https://image.tmdb.org/t/p/w500${movie.poster_path}')`,
-                }}
-              ></div>
-            </div> */}
-            <div className="flex flex-col justify-between pt-4">
-              <h1 className="text-white hover:text-primary-dark block cursor-pointer text-sm font-semibold transition-colors duration-300">
-                {movie.title.length > 30
-                  ? `${movie.title.substring(0, 27)}...`
-                  : movie.title}
-              </h1>
-              <div className="flex justify-between items-center mt-1">
-                <p className="text-sm text-gray-400 font-secondary">
-                  {movie.release_date?.substring(0, 4)}
-                </p>
-                <p className="text-sm text-gray-400 font-secondary flex items-center">
-                  <span className="mr-1"></span>
-                  <Star size={20} className="mr-1 fill-[#FFD700]" />
-                  {movie.vote_average}%
-                </p>
-              </div>
-            </div>
-          </div>
+          <MovieCard key={movie.id} movie={movie} className="h-64 w-full" />
         ))}
       </div>
     </div>
