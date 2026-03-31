@@ -48,8 +48,8 @@ function TopRated() {
         <h1>Top Rated</h1>
       </div>
       <div className="flex overflow-x-auto space-x-4 px-4 py-2">
-        {movieList.map((movie, i) => (
-          <div key={i} className="h-96 rounded-md duration-300">
+        {movieList.map((movie) => (
+          <div key={movie.id} className="h-96 rounded-md duration-300">
             <Dialog>
               <DialogTrigger asChild>
                 <div

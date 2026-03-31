@@ -26,21 +26,21 @@ const Search = () => {
   const [debouncedQuery, setDebouncedQuery] = useState(query);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchRecommendations = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const recommendations = await getTrending();
-        setResults(recommendations);
-      } catch (error) {
-        setError("Error fetching recommendations.");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchTrending = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const recommendations = await getTrending();
+      setResults(recommendations);
+    } catch (error) {
+      setError("Error fetching recommendations.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchRecommendations();
+  useEffect(() => {
+    fetchTrending();
   }, []);
 
   useEffect(() => {
@@ -54,33 +54,21 @@ const Search = () => {
   }, [query]);
 
   useEffect(() => {
-    const fetchResults = async () => {
-      if (debouncedQuery) {
-        setLoading(true);
-        setError(null);
-        try {
-          const searchResults = await handleSearch(debouncedQuery);
-          setResults(searchResults);
-        } catch (error) {
-          setError("Error fetching search results.");
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        const fetchRecommendations = async () => {
-          setLoading(true);
-          setError(null);
-          try {
-            const recommendations = await getTrending();
-            setResults(recommendations);
-          } catch (error) {
-            setError("Error fetching recommendations.");
-          } finally {
-            setLoading(false);
-          }
-        };
+    if (!debouncedQuery) {
+      fetchTrending();
+      return;
+    }
 
-        fetchRecommendations();
+    const fetchResults = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const searchResults = await handleSearch(debouncedQuery);
+        setResults(searchResults);
+      } catch (error) {
+        setError("Error fetching search results.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -108,8 +96,8 @@ const Search = () => {
       {loading && <p>Loading...</p>}
       {error && <p className="text-red-500">{error}</p>}
       <div className="grid xl:grid-cols-7 lg:grid-cols-5 md:grid-cols-3 gap-4 p-4">
-        {results.map((movie, i) => (
-          <div key={i} className="rounded-md duration-300 flex flex-col h-96 ">
+        {results.map((movie) => (
+          <div key={movie.id} className="rounded-md duration-300 flex flex-col h-96 ">
             <Dialog>
               <DialogTrigger asChild>
                 <div

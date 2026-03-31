@@ -22,7 +22,6 @@ const MovieDetails = ({ params }) => {
     const fetchMovieDetails = async () => {
       try {
         const movieData = await getMoviePopularDetails(movieId);
-        console.log("Movie data:", movieData);
         setMovie(movieData);
         setLoading(false);
       } catch (error) {
